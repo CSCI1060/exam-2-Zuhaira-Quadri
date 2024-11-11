@@ -1,2 +1,57 @@
 Use this file to submit the extra credit problem. Be sure to describe your
 process for solving the problem, and not just to give the solution. 
+
+so first, i took the provided message and wrote it into a notepad. i downloaded the file and placed it into a folder which I used as my directory. this file was called 'ciper.txt'
+
+this was my code which was writted based on the assumption that the letters were shifted over by 3.
+
+function caesar(in_filename, out_filename, shift)
+    % Open the cipher file for reading
+    inID = fopen(in_filename, "r");
+    if inID == -1
+        error("Could not open input file");
+    end
+
+    % Open the output file for writing
+    outID = fopen(out_filename, "w");
+    if outID == -1
+        error("Could not open output file");
+    end
+
+    % Read and decode each character in the input file
+    while ~feof(inID)
+        inputChar = fread(inID, 1, '*char');  % Read one character at a time
+
+        % Check if the character is alphabetic
+        if isletter(inputChar)
+            if isstrprop(inputChar, 'upper')
+                % Handle uppercase letters with ASCII base 'A'
+                base = 'A';
+            else
+                % Handle lowercase letters with ASCII base 'a'
+                base = 'a';
+            end
+            
+            % Apply Caesar shift (subtract shift) and wrap within alphabet
+            decodedChar = mod(double(inputChar) - double(base) + shift, 26) + double(base);
+            fwrite(outID, char(decodedChar));  % Write decoded character to output
+        else
+            % If not alphabetic, write character as-is
+            fwrite(outID, inputChar);
+        end
+    end
+
+    % Close the files after processing
+    fclose(inID);
+    fclose(outID);
+end
+
+using this, i inputed the following into the command window: "caesar('cipher.txt', 'decryption.txt', -3);"
+this created a new file called decryption which opened up in my directory, opening that file, the decrypted message was found to be the following:
+
+"‘I WISH IT NEED NOT HAVE HAPPENED IN MY TIME,’ SAID
+FRODO.
+‘SO DO I,’ SAID GANDALF, ‘AND SO DO ALL WHO LIVE TO
+SEE SUCH TIMES. BUT THAT IS NOT FOR THEM TO DECIDE.
+ALL WE HAVE TO DECIDE IS WHAT TO DO WITH THE TIME
+THAT IS GIVEN, US."
